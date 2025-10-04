@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-router.post('/register', (req, res) => {
-
+router.get('/', (req, res) => {
+    res.send('This is GET recipes');
 });
+
+module.exports = router;
