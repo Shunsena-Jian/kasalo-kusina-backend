@@ -1,9 +1,9 @@
-require('dotenv').config();
-const session = require('express-session');
-const RedisStore = require('connect-redis').default;
-const { createClient } = require('redis');
-const { REDIS } = require('../constants/session');
-const { ENVIRONMENTS } = require('../constants/environments');
+import 'dotenv/config';
+import session from 'express-session';
+import { RedisStore } from 'connect-redis';
+import { createClient } from 'redis';
+import { REDIS } from '../constants/session.js'
+import { ENVIRONMENTS } from '../constants/environments.js'
 
 const redisClient = createClient({
     url: process.env.REDIS_URL || 'redis://localhost:6379',
@@ -20,7 +20,7 @@ const redisStore = new RedisStore({
     prefix: REDIS.PREFIX,
 });
 
-const sessionMiddleware = session({
+export const sessionMiddleware = session({
     store: redisStore,
     secret: process.env.REDIS_SECRET,
     resave: false,
@@ -33,7 +33,7 @@ const sessionMiddleware = session({
     }
 });
 
-const isAuthenticated = (req, res, next) => {
+export const isAuthenticated = (req, res, next) => {
     if (req.session && req.session.userId) {
         return next();
     } else {
@@ -41,16 +41,10 @@ const isAuthenticated = (req, res, next) => {
     }
 };
 
-const isGuest = (req, res, next) => {
+export const isGuest = (req, res, next) => {
     if (req.session && req.session.userId) {
         res.status(403).json({message: 'Forbidden: You are already logged in.'});
     } else {
         return next();
     }
-};
-
-module.exports = {
-    sessionMiddleware,
-    isAuthenticated,
-    isGuest,
 };

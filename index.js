@@ -1,18 +1,17 @@
-require('dotenv').config();
+import 'dotenv/config';
+import express from 'express';
+import userRoutes from './src/routes/users.js';
+import recipeRoutes from './src/routes/recipes.js';
+import authRoutes from './src/routes/auth.js';
+import {sessionMiddleware} from './src/middlewares/session.js';
 
-const express = require('express');
 const app = express();
 const PORT = process.env.PORT;
-
-const userRoutes = require('./src/routes/users');
-const recipeRoutes = require('./src/routes/recipes');
-const authRoutes = require('./src/routes/auth');
-// const sessionMiddleware = require('./middlewares/session');
 
 app.use('/api/users', userRoutes);
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/auth',  authRoutes);
-// app.use(sessionMiddleware);
+app.use(sessionMiddleware);
 
 app.get('/',  (req, res) => {
     res.send('Hi world');
