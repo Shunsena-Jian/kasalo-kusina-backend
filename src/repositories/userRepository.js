@@ -7,20 +7,13 @@ class UserRepository {
     async createUser(user) {
         const { username, password, email } = user;
         const id = uuid();
-        const [userId] = await knex(table).insert({
+
+        return knex(table).insert({
             id,
             username,
             password,
             email
         });
-
-        if (userId) {
-            return this.findUser({
-                id: id
-            });
-        }
-
-        return null;
     }
 
     async findUser(where) {

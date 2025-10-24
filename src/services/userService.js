@@ -25,7 +25,9 @@ class UserService {
             password: hashedPassword,
         };
 
-        return UserRepository.createUser(newUser);
+        await UserRepository.createUser(newUser);
+
+        return UserRepository.findUser({ email: user.email });
     }
 
     async verifyUser(email, userPassword) {
