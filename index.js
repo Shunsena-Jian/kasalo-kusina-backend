@@ -3,7 +3,13 @@ import express from 'express';
 import userRoutes from './src/routes/users.js';
 import recipeRoutes from './src/routes/recipes.js';
 import authRoutes from './src/routes/auth.js';
-import {sessionMiddleware} from './src/middlewares/session.js';
+// import {sessionMiddleware} from './src/middlewares/session.js';
+import mongoDB from './src/config/mongodb.js';
+
+// Connect to MongoDB
+mongoDB().then(r => {
+    console.log('MongoDB connected');
+});
 
 const app = express();
 const PORT = process.env.PORT;
@@ -11,7 +17,7 @@ const PORT = process.env.PORT;
 app.use('/api/users', userRoutes);
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/auth',  authRoutes);
-app.use(sessionMiddleware);
+// app.use(sessionMiddleware);
 
 app.get('/',  (req, res) => {
     res.send('Hi world');
