@@ -5,6 +5,7 @@ import recipeRoutes from './src/routes/recipes.js';
 import authRoutes from './src/routes/auth.js';
 // import {sessionMiddleware} from './src/middlewares/session.js';
 import mongoDB from './src/config/mongodb.js';
+import apiResponse from "./src/middlewares/responseHandlers.js";
 
 // Connect to MongoDB
 mongoDB().then(r => {
@@ -12,9 +13,11 @@ mongoDB().then(r => {
 });
 
 const app = express();
+app.use(express.json());
+app.use(apiResponse)
+
 const PORT = process.env.PORT;
 
-app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/auth',  authRoutes);
