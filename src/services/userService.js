@@ -5,7 +5,9 @@ const saltRounds = 10;
 
 class UserService {
     async findUserById(id) {
-        const user = await UserRepository.findUserById(id);
+        const user = await UserRepository.findUser({
+            id: id
+        });
         if (user) {
             const {password, ...userWithoutPassword} = user;
             return userWithoutPassword;
@@ -27,7 +29,10 @@ class UserService {
     }
 
     async verifyUser(email, userPassword) {
-        const user = await UserRepository.findUserByEmail(email);
+        const user = await UserRepository.findUser({
+            email: email
+        });
+
         if (! user) {
             return null;
         }
@@ -42,7 +47,10 @@ class UserService {
     }
 
     async destroyUser(email) {
-        const response = await UserRepository.findUserByEmail(email);
+        const response = await UserRepository.findUser({
+            email:email
+        });
+
         if (! response) {
             return null;
         }
