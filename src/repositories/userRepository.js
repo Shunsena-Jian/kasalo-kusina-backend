@@ -27,8 +27,8 @@ class UserRepository {
             .first();
     }
 
-    async destroyUserByEmail(email) {
-        return knex(table).where({ email }).del();
+    async destroyUser(where) {
+        return knex(table).where(where).del();
     }
 }
 

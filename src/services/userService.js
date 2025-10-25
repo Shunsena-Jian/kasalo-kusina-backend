@@ -48,16 +48,18 @@ class UserService {
         return userWithoutPassword;
     }
 
-    async destroyUser(email) {
+    async destroyUser(id) {
         const response = await UserRepository.findUser({
-            email:email
+            id: id
         });
 
         if (! response) {
             return null;
         }
 
-        await UserRepository.destroyUserByEmail(email);
+        await UserRepository.destroyUser({
+            id: id
+        });
 
         return response;
     }

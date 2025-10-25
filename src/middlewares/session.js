@@ -6,10 +6,12 @@ import { REDIS } from '../constants/session.js'
 import { ENVIRONMENTS } from '../constants/environments.js'
 
 const redisClient = createClient({
-    url: process.env.REDIS_URL || 'redis://localhost:6379',
+    url: process.env.REDIS_URL,
 });
 
-redisClient.connect().catch(console.error);
+redisClient.connect()
+    .then(() => console.log('Redis connected'))
+    .catch(console.error);
 
 redisClient.on('error', err => {
     console.error('Redis Client Error: ', err);
@@ -37,14 +39,6 @@ export const isAuthenticated = (req, res, next) => {
     if (req.session && req.session.userId) {
         return next();
     } else {
-        res.status(403).json({message: 'Forbidden: You are already logged in.'});
-    }
-};
-
-export const isGuest = (req, res, next) => {
-    if (req.session && req.session.userId) {
-        res.status(403).json({message: 'Forbidden: You are already logged in.'});
-    } else {
-        return next();
+        res.error('Forbidden: You are already logged in.', 403);
     }
 };

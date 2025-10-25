@@ -27,6 +27,10 @@ export async function createUser(req, res) {
 
     try {
         const user = await UserService.createUser(req.body);
+
+        req.session.userId = user.id;
+        console.log(req.session);
+
         res.success(user, 'User created successfully', 201);
     } catch (error) {
         res.error(error.message, 'Internal Server Error', 500);
@@ -35,18 +39,26 @@ export async function createUser(req, res) {
 
 export async function deleteUser(req, res) {
     try {
-        const userEmail = req.params.email;
+        const userId = req.params.id;
 
-        if (! userEmail) {
-            return res.error('User email is required', 400);
+        if (! userId) {
+            return res.error('User ID is required', 400);
         }
 
-        const response = await UserService.destroyUser(userEmail);
+        const response = await UserService.destroyUser(userId);
         if (! response) {
             res.error('User not found', 404);
         }
 
-        res.success(null, 'User deleted successfully');
+        if (req.session && req.session.userId === userId) {
+            req.session.destroy(err => {
+                if (err) {
+                    return res.error(err.message, 'Internal Server Error', 500);
+                }
+            });
+        }
+
+        res.success(null, 'User deleted and session destroyed successfully');
     } catch (error) {
         res.error(error.message, 'Internal Server Error', 500);
     }

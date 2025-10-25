@@ -15,6 +15,6 @@ router.get('/:id', getUserDetails);
 
 router.post('/register', ...createUserRules, createUser);
 
-router.delete('/:email', deleteUser)
+router.delete('/:id', deleteUser)
 
 export default router;
