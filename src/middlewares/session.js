@@ -42,3 +42,11 @@ export const isAuthenticated = (req, res, next) => {
         res.error('Forbidden: Please log in first.', 403);
     }
 };
+
+export const isSameUser = (req, res, next) => {
+    if (req.session.userId === req.params.id) {
+        return next();
+    } else {
+        res.error('Forbidden: You are not authorized to perform this action.', 403);
+    }
+}

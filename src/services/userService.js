@@ -1,5 +1,6 @@
 import UserRepository from "../repositories/userRepository.js";
 import bcrypt from "bcrypt";
+import {updateUser} from "../controllers/userController.js";
 
 const saltRounds = 10;
 
@@ -72,6 +73,55 @@ class UserService {
         });
 
         return response;
+    }
+
+    async updateUser(id, updatedUserDetails) {
+        const user = await UserRepository.findUser({
+            id: id
+        });
+
+        if (! user) {
+            return null;
+        }
+
+        const fieldsToUpdate = {};
+
+        if (updatedUserDetails.username) {
+            fieldsToUpdate.username = updatedUserDetails.username;
+        }
+
+        if (updatedUserDetails.new_password) {
+            fieldsToUpdate.password = await bcrypt.hash(updatedUserDetails.new_password, saltRounds);
+        }
+
+        if (Object.keys(fieldsToUpdate).length === 0) {
+            const { password, ...userWithoutPassword } = user;
+            return userWithoutPassword;
+        }
+
+        const updateResult = await UserRepository.updateUser({
+            id: id
+        }, {
+            ...fieldsToUpdate,
+        });
+
+        if (updateResult) {
+            return this.findUserById(id);
+        }
+
+        return null;
+    }
+
+    async verifyPassword(id, oldPassword) {
+        const user = await UserRepository.findUser({
+            id: id
+        });
+
+        if (! user) {
+            return null;
+        }
+
+        return await bcrypt.compare(oldPassword, user.password);
     }
 }
 

@@ -105,3 +105,36 @@ export async function deleteUser(req, res) {
         res.error(error.message, 'Internal Server Error', 500);
     }
 }
+
+export async function updateUser(req, res){
+    const errors = validationResult(req);
+    if (! errors.isEmpty()) {
+        return res.error(errors.array(), 'Validation Error', 400);
+    }
+
+    try {
+        const userId = req.params.id;
+        const { old_password, new_password, ...userDetails } = req.body;
+
+        if (new_password) {
+            if (! old_password) {
+                return res.error('Old password is required', 400);
+            }
+
+            const isPasswordVerified = await UserService.verifyPassword(userId, old_password);
+            if (! isPasswordVerified) {
+                return res.error('Invalid old password', 401);
+            }
+        }
+
+        const updatedUser = await UserService.updateUser(userId, {...userDetails, new_password});
+
+        if (! updatedUser) {
+            return res.error('User not found or update failed', 404);
+        }
+
+        res.success(updatedUser, 'User details updated successfully');
+    } catch (error) {
+        res.error(error.message, 'Internal Server Error', 500);
+    }
+}
