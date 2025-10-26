@@ -27,7 +27,16 @@ class UserService {
 
         await UserRepository.createUser(newUser);
 
-        return UserRepository.findUser({ email: user.email });
+        const createdUser = await UserRepository.findUser({
+            email: user.email
+        })
+
+        if (createdUser) {
+            const { password, ...userWithoutPassword } = createdUser;
+            return userWithoutPassword;
+        }
+
+        return null;
     }
 
     async verifyUser(email, userPassword) {
@@ -40,6 +49,7 @@ class UserService {
         }
 
         const isMatch = await bcrypt.compare(userPassword, user.password);
+
         if (! isMatch) {
             return null;
         }

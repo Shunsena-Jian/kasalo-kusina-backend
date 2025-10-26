@@ -39,6 +39,6 @@ export const isAuthenticated = (req, res, next) => {
     if (req.session && req.session.userId) {
         return next();
     } else {
-        res.error('Forbidden: You are already logged in.', 403);
+        res.error('Forbidden: Please log in first.', 403);
     }
 };

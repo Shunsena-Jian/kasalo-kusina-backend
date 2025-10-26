@@ -29,9 +29,49 @@ export async function createUser(req, res) {
         const user = await UserService.createUser(req.body);
 
         req.session.userId = user.id;
-        console.log(req.session);
 
         res.success(user, 'User created successfully', 201);
+    } catch (error) {
+        res.error(error.message, 'Internal Server Error', 500);
+    }
+}
+
+export async function loginUser(req, res) {
+    const errors = validationResult(req);
+    if (! errors.isEmpty()) {
+        return res.error(errors.array(), 'Validation Error', 400);
+    }
+
+    try {
+        const email = req.body.email;
+        const password = req.body.password;
+
+        const response = await UserService.verifyUser(email, password);
+
+        if (response) {
+            req.session.userId = response.id;
+            return res.success(response, 'Login successful', 200);
+        }
+
+        res.error('Invalid email or password', 401);
+    } catch (error) {
+        res.error(error.message, 'Internal Server Error', 500);
+    }
+}
+
+export async function logoutUser(req, res) {
+    try {
+        if (req.session && req.session.userId) {
+            req.session.destroy(err => {
+                if (err) {
+                    return res.error(err.message, 'Internal Server Error', 500);
+                }
+
+                res.success(null, 'User logged out successfully');
+            });
+        } else {
+            res.success(null, 'User already logged out');
+        }
     } catch (error) {
         res.error(error.message, 'Internal Server Error', 500);
     }
@@ -55,10 +95,12 @@ export async function deleteUser(req, res) {
                 if (err) {
                     return res.error(err.message, 'Internal Server Error', 500);
                 }
-            });
-        }
 
-        res.success(null, 'User deleted and session destroyed successfully');
+                res.success(null, 'User deleted and session destroyed successfully');
+            });
+        } else {
+            res.success(null, 'User deleted successfully');
+        }
     } catch (error) {
         res.error(error.message, 'Internal Server Error', 500);
     }

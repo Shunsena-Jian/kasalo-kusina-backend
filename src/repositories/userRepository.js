@@ -18,11 +18,6 @@ class UserRepository {
 
     async findUser(where) {
         return knex(table)
-            .select(
-                'id',
-                'username',
-                'email'
-            )
             .where(where)
             .first();
     }
