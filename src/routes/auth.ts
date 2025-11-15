@@ -1,0 +1,16 @@
+import express from 'express';
+
+import { loginUserRules, createUserRules } from '../rules/auth.ts';
+import {
+    loginUser,
+    logoutUser,
+    createUser,
+} from '../controllers/userController.ts';
+
+const router = express.Router();
+
+router.post('/login', ...loginUserRules, loginUser);
+router.post('/register', ...createUserRules, createUser);
+router.post('/logout', logoutUser);
+
+export default router;

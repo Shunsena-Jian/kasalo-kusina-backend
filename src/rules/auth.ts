@@ -1,10 +1,13 @@
-import {body} from "express-validator";
+import { body } from 'express-validator';
 
 export const createUserRules = [
     body('username').notEmpty().withMessage('Username is required'),
     body('email').notEmpty().isEmail().withMessage('A valid email is required'),
-    body('password').notEmpty().isLength({min:8}).withMessage('Password must be at least 8 characters long'),
-]
+    body('password')
+        .notEmpty()
+        .isLength({ min: 8 })
+        .withMessage('Password must be at least 8 characters long'),
+];
 
 export const loginUserRules = [
     body('email').notEmpty().isEmail().withMessage('Enter a valid email'),
@@ -13,5 +16,8 @@ export const loginUserRules = [
 
 export const updateUserRules = [
     body('username').optional().notEmpty().withMessage('Username is required'),
-    body('new_password').notEmpty().isLength({ min: 8 }).withMessage('Password must be 8 characters long'),
+    body('new_password')
+        .optional()
+        .isLength({ min: 8 })
+        .withMessage('Password must be 8 characters long'),
 ];

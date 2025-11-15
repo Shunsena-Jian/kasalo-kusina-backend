@@ -1,4 +1,6 @@
-function apiResponse(req, res, next) {
+import { type Request, type Response, type NextFunction } from 'express';
+
+function apiResponse(req: Request, res: Response, next: NextFunction) {
     res.success = (data, message = 'Success', statusCode = 200) => {
         res.status(statusCode).json({
             message,
@@ -11,7 +13,7 @@ function apiResponse(req, res, next) {
             success: false,
             message,
             errors: Array.isArray(errors) ? errors : [errors],
-        })
+        });
     };
 
     return next();
