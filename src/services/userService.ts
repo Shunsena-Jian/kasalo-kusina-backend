@@ -1,24 +1,23 @@
 import UserRepository from '../repositories/userRepository.js';
 import bcrypt from 'bcrypt';
-import { CreateUser, UpdateUser } from '../types/user.js';
+import { type CreateUser, type PublicUser, type UpdateUser } from '../types/user.js';
 
 const saltRounds = 10;
 
 class UserService {
-    async findUserById(id: string) {
+    async findUserById(id: string): Promise<PublicUser | null> {
         const user = await UserRepository.findUser({
             id: id,
         });
         if (user) {
-            const { ...userWithoutPassword } = user;
-            delete userWithoutPassword.password;
+            const { password, ...userWithoutPassword } = user;
             return userWithoutPassword;
         }
 
         return null;
     }
 
-    async createUser(user: CreateUser) {
+    async createUser(user: CreateUser): Promise<PublicUser | null> {
         if (!user.password) {
             throw new Error('Password is required');
         }
@@ -37,15 +36,17 @@ class UserService {
         });
 
         if (createdUser) {
-            const { ...userWithoutPassword } = createdUser;
-            delete userWithoutPassword.password;
+            const { password, ...userWithoutPassword } = createdUser;
             return userWithoutPassword;
         }
 
         return null;
     }
 
-    async verifyUser(email: string, userPassword: string) {
+    async verifyUser(
+        email: string,
+        userPassword: string
+    ): Promise<PublicUser | null> {
         const user = await UserRepository.findUser({
             email: email,
         });
@@ -60,12 +61,11 @@ class UserService {
             return null;
         }
 
-        const { ...userWithoutPassword } = user;
-        delete userWithoutPassword.password;
+        const { password, ...userWithoutPassword } = user;
         return userWithoutPassword;
     }
 
-    async destroyUser(id: string) {
+    async destroyUser(id: string): Promise<PublicUser | null> {
         const response = await UserRepository.findUser({
             id: id,
         });
@@ -78,10 +78,14 @@ class UserService {
             id: id,
         });
 
-        return response;
+        const { password, ...userWithoutPassword } = response;
+        return userWithoutPassword;
     }
 
-    async updateUser(id: string, updatedUserDetails: UpdateUser) {
+    async updateUser(
+        id: string,
+        updatedUserDetails: UpdateUser
+    ): Promise<PublicUser | null> {
         const user = await UserRepository.findUser({
             id: id,
         });
@@ -97,8 +101,7 @@ class UserService {
         }
 
         if (Object.keys(fieldsToUpdate).length === 0) {
-            const { ...userWithoutPassword } = user;
-            delete userWithoutPassword.password;
+            const { password, ...userWithoutPassword } = user;
             return userWithoutPassword;
         }
 
@@ -134,7 +137,7 @@ class UserService {
         id: string,
         oldPassword: string,
         newPassword: string
-    ) {
+    ): Promise<PublicUser | null> {
         const isPasswordVerified = await this.verifyPassword(id, oldPassword);
         if (!isPasswordVerified) {
             return null;

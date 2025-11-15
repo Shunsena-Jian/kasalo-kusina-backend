@@ -9,6 +9,8 @@ export interface User {
 
 export type CreateUser = Pick<User, 'username' | 'email' | 'password'>;
 
-export type UpdateUser = Partial<Omit<User, 'id' | 'created_at'>>;
+export type UpdateUser = Partial<Omit<User, 'id' | 'created_at' | 'updated_at'>>;
+
+export type PublicUser = Omit<User, 'password'>;
 
 export type UserWhere = Partial<User>;

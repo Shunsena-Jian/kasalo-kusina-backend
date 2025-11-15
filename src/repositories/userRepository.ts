@@ -22,8 +22,10 @@ class UserRepository {
     }
 
     async updateUser(where: UserWhere, updatedUser: UpdateUser) {
-        updatedUser.updated_at = knex.fn.now();
-        return knex(table).where(where).update(updatedUser);
+        return knex(table).where(where).update({
+            ...updatedUser,
+            updated_at: knex.fn.now(),
+        });
     }
 
     async findUser(where: UserWhere) {
