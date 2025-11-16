@@ -1,12 +1,12 @@
 import express from 'express';
 
-import { updateUserRules } from '../rules/auth.ts';
+import { updateUserRules } from '../rules/auth.js';
 import {
     getUserDetails,
     deleteUser,
     updateUser,
-} from '../controllers/userController.ts';
-import { isAuthenticated, isSameUser } from '../middlewares/session.ts';
+} from '../controllers/userController.js';
+import { isAuthenticated, isSameUser } from '../middlewares/session.js';
 
 const router = express.Router();
 

@@ -172,13 +172,6 @@ export async function deleteUser(req: Request, res: Response) {
 }
 
 export async function updateUser(req: Request, res: Response) {
-    if (req.session.userId !== req.params.id) {
-        return res.error(
-            'You are not authorized to update this user',
-            'Unauthorized',
-            401
-        );
-    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.error(errors.array(), 'Validation Error', 400);
@@ -189,35 +182,8 @@ export async function updateUser(req: Request, res: Response) {
         if (!userId) {
             return res.error('User ID is required', 'Bad Request', 400);
         }
-        const { old_password, new_password, ...userDetails } = req.body;
 
-        if (new_password) {
-            if (!old_password) {
-                return res.error(
-                    'Old password is required',
-                    'Bad Request',
-                    400
-                );
-            }
-
-            const updatedUser = await UserService.updateUserPassword(
-                userId,
-                old_password,
-                new_password
-            );
-
-            if (!updatedUser) {
-                return res.error(
-                    'Invalid old password or update failed',
-                    'Unauthorized',
-                    401
-                );
-            }
-        }
-
-        const updatedUser = await UserService.updateUser(userId, {
-            ...userDetails,
-        });
+        const updatedUser = await UserService.updateUser(userId, req.body);
 
         if (!updatedUser) {
             return res.error(

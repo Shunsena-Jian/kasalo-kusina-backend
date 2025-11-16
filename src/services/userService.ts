@@ -84,7 +84,10 @@ class UserService {
 
     async updateUser(
         id: string,
-        updatedUserDetails: UpdateUser
+        updatedUserDetails: UpdateUser & {
+            old_password?: string;
+            new_password?: string;
+        }
     ): Promise<PublicUser | null> {
         const user = await UserRepository.findUser({
             id: id,
@@ -100,6 +103,26 @@ class UserService {
             fieldsToUpdate.username = updatedUserDetails.username;
         }
 
+        if (updatedUserDetails.new_password) {
+            if (!updatedUserDetails.old_password) {
+                throw new Error(
+                    'Old password is required to update the password'
+                );
+            }
+            const isPasswordVerified = await this.verifyPassword(
+                id,
+                updatedUserDetails.old_password
+            );
+            if (!isPasswordVerified) {
+                return null;
+            }
+
+            fieldsToUpdate.password = await bcrypt.hash(
+                updatedUserDetails.new_password,
+                saltRounds
+            );
+        }
+
         if (Object.keys(fieldsToUpdate).length === 0) {
             const { password, ...userWithoutPassword } = user;
             return userWithoutPassword;
@@ -109,7 +132,7 @@ class UserService {
             {
                 id: id,
             },
-            {
+            { 
                 ...fieldsToUpdate,
             }
         );
@@ -131,34 +154,6 @@ class UserService {
         }
 
         return await bcrypt.compare(oldPassword, user.password);
-    }
-
-    async updateUserPassword(
-        id: string,
-        oldPassword: string,
-        newPassword: string
-    ): Promise<PublicUser | null> {
-        const isPasswordVerified = await this.verifyPassword(id, oldPassword);
-        if (!isPasswordVerified) {
-            return null;
-        }
-
-        const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-
-        const updateResult = await UserRepository.updateUser(
-            {
-                id: id,
-            },
-            {
-                password: hashedPassword,
-            }
-        );
-
-        if (updateResult) {
-            return this.findUserById(id);
-        }
-
-        return null;
     }
 }
 

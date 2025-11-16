@@ -1,4 +1,4 @@
-import knex, { Knex } from 'knex';
+import knex from 'knex';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -12,7 +12,7 @@ if (!dbHost || !dbUser || !dbPassword || !dbName) {
     throw new Error('Database environment variables are not defined');
 }
 
-const knexConfig: Knex.Config = {
+const knexConfig: knex.Knex.Config = {
     client: 'mysql2',
     connection: {
         host: dbHost,

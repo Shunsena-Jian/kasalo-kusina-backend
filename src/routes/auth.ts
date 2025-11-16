@@ -1,11 +1,11 @@
 import express from 'express';
 
-import { loginUserRules, createUserRules } from '../rules/auth.ts';
+import { loginUserRules, createUserRules } from '../rules/auth.js';
 import {
     loginUser,
     logoutUser,
     createUser,
-} from '../controllers/userController.ts';
+} from '../controllers/userController.js';
 
 const router = express.Router();
 
