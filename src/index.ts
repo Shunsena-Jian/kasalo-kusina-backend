@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 
+import adminRoutes from './routes/admin.js';
 import userRoutes from './routes/users.js';
 import recipeRoutes from './routes/recipes.js';
 import authRoutes from './routes/auth.js';
@@ -22,6 +23,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(sessionMiddleware);
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/recipes', recipeRoutes);
 

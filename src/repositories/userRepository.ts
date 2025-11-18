@@ -10,7 +10,7 @@ const table = 'users';
 
 class UserRepository {
     async createUser(user: CreateUser) {
-        const { username, password, email } = user;
+        const { username, password, email, user_type } = user;
         const id = uuid();
 
         return knex(table).insert({
@@ -18,6 +18,7 @@ class UserRepository {
             username,
             password,
             email,
+            user_type,
         });
     }
 
@@ -34,6 +35,16 @@ class UserRepository {
 
     async destroyUser(where: UserWhere) {
         return knex(table).where(where).del();
+    }
+
+    async listUsers(page: number, limit: number) {
+        const offset = (page - 1) * limit;
+        return knex(table).limit(limit).offset(offset);
+    }
+
+    async countUsers(): Promise<number> {
+        const result = await knex(table).count({ count: '*' }).first();
+        return Number(result?.count) || 0;
     }
 }
 

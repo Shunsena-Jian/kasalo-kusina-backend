@@ -5,6 +5,7 @@ import { createClient } from 'redis';
 import { REDIS } from '../constants/session.js';
 import { ENVIRONMENTS } from '../constants/environments.js';
 import { type Request, type Response, type NextFunction } from 'express';
+import { USER_TYPES } from "../constants/users.js";
 
 const redisUrl = process.env.REDIS_URL;
 if (!redisUrl) {
@@ -69,3 +70,21 @@ export const isSameUser = (req: Request, res: Response, next: NextFunction) => {
         );
     }
 };
+
+export const isAdmin = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    if (req.session
+        && (req.session.userType === USER_TYPES.ADMIN || req.session.userType === USER_TYPES.SUPER_ADMIN)
+    ) {
+        return next();
+    } else {
+        res.error(
+            'Forbidden: You are not authorized to perform this action.',
+            'Forbidden',
+            403
+        );
+    }
+}

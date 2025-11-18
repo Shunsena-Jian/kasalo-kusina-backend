@@ -39,6 +39,7 @@ export async function createUser(req: Request, res: Response) {
 
         if (user && req.session) {
             req.session.userId = user.id;
+            req.session.userType = user.user_type;
         }
 
         res.success(user, 'User created successfully', 201);
@@ -69,6 +70,7 @@ export async function loginUser(req: Request, res: Response) {
 
         if (response) {
             req.session.userId = response.id;
+            req.session.userType = response.user_type;
             return res.success(response, 'Login successful', 200);
         }
 

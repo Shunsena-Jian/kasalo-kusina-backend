@@ -26,6 +26,7 @@ class UserService {
         const newUser: CreateUser = {
             username: user.username,
             email: user.email,
+            user_type: user.user_type,
             password: hashedPassword,
         };
 
