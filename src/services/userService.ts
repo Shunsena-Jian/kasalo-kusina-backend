@@ -1,6 +1,7 @@
 import UserRepository from '../repositories/userRepository.js';
 import bcrypt from 'bcrypt';
 import { type CreateUser, type PublicUser, type UpdateUser } from '../types/user.js';
+import {USER_STATUSES, USER_TYPES} from "../constants/users.js";
 
 const saltRounds = 10;
 
@@ -62,6 +63,11 @@ class UserService {
             return null;
         }
 
+        const isActive = user.user_status === USER_STATUSES.ACTIVE;
+        if (! isActive) {
+            return null;
+        }
+
         const { password, ...userWithoutPassword } = user;
         return userWithoutPassword;
     }
@@ -102,6 +108,14 @@ class UserService {
 
         if (updatedUserDetails.username) {
             fieldsToUpdate.username = updatedUserDetails.username;
+        }
+
+        if (updatedUserDetails.user_status) {
+            fieldsToUpdate.user_status = updatedUserDetails.user_status;
+        }
+
+        if (updatedUserDetails.user_type) {
+            fieldsToUpdate.user_type = updatedUserDetails.user_type;
         }
 
         if (updatedUserDetails.new_password) {

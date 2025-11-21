@@ -4,3 +4,9 @@ export const USER_TYPES = Object.freeze({
     KASALO: 'kasalo',
     GUEST: 'guest',
 });
+
+export const USER_STATUSES = Object.freeze({
+    ACTIVE: 'active',
+    INACTIVE: 'inactive',
+    SUSPENDED: 'suspended',
+});

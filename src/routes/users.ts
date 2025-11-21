@@ -1,16 +1,15 @@
 import express from 'express';
 
-import { updateUserRules } from '../rules/auth.js';
+import { updateUserRules } from '../rules/user.js';
 import {
     getUserDetails,
-    deleteUser,
     updateUser,
 } from '../controllers/userController.js';
 import { isAuthenticated, isSameUser } from '../middlewares/session.js';
 
 const router = express.Router();
 
-router.get('/:id', isAuthenticated, getUserDetails);
+router.get('/:id', isAuthenticated, isSameUser, getUserDetails);
 
 router.patch(
     '/:id',
@@ -19,7 +18,5 @@ router.patch(
     isSameUser,
     updateUser
 );
-
-router.delete('/:id', isAuthenticated, isSameUser, deleteUser);
 
 export default router;

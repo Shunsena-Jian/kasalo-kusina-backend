@@ -74,7 +74,7 @@ export async function loginUser(req: Request, res: Response) {
             return res.success(response, 'Login successful', 200);
         }
 
-        res.error('Invalid email or password', 'Unauthorized', 401);
+        res.error('Login failed', 'Unauthorized', 401);
     } catch (error) {
         if (error instanceof Error) {
             res.error(error.message, 'Internal Server Error', 500);
