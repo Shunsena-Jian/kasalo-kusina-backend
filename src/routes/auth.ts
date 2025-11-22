@@ -1,6 +1,8 @@
 import express from 'express';
 
-import { loginUserRules, createUserRules } from '../rules/auth.js';
+import { loginUserRules } from '../rules/auth.js';
+import { createUserRules } from '../rules/user.js';
+
 import {
     loginUser,
     logoutUser,
