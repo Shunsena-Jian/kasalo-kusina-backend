@@ -19,15 +19,17 @@ class UserService {
     }
 
     async createUser(user: CreateUser): Promise<PublicUser | null> {
-        if (!user.password) {
+        if (! user.password) {
             throw new Error('Password is required');
         }
+
         const hashedPassword = await bcrypt.hash(user.password, saltRounds);
 
         const newUser: CreateUser = {
             username: user.username,
             email: user.email,
             user_type: user.user_type,
+            user_status: USER_STATUSES.ACTIVE,
             password: hashedPassword,
         };
 

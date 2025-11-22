@@ -37,6 +37,10 @@ export async function createUser(req: Request, res: Response) {
     try {
         const user = await UserService.createUser(req.body);
 
+        if (! user) {
+            res.error('Failed to create user', 'User Creation Error', 400);
+        }
+
         if (user && req.session) {
             req.session.userId = user.id;
             req.session.userType = user.user_type;
