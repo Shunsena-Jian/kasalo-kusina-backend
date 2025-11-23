@@ -9,8 +9,7 @@ class AdminService {
         const users = await UserRepository.listUsers(page, limit);
         const totalUsers = await UserRepository.countUsers();
 
-        const usersWithoutPassword = users.map((user) => {
-            const { password, ...userWithoutPassword } = user;
+        const usersWithoutPassword = users.map(({ password, ...userWithoutPassword }) => {
             return userWithoutPassword;
         });
 

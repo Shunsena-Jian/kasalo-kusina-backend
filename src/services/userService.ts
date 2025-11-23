@@ -1,7 +1,7 @@
 import UserRepository from '../repositories/userRepository.js';
 import bcrypt from 'bcrypt';
 import { type CreateUser, type PublicUser, type UpdateUser } from '../types/user.js';
-import {USER_STATUSES, USER_TYPES} from "../constants/users.js";
+import { USER_STATUSES } from "../constants/users.js";
 
 const saltRounds = 10;
 
@@ -55,7 +55,7 @@ class UserService {
             email: email,
         });
 
-        if (!user || !user.password) {
+        if (! user || ! user.password) {
             return null;
         }
 
@@ -102,7 +102,7 @@ class UserService {
             id: id,
         });
 
-        if (!user) {
+        if (! user) {
             return null;
         }
 
