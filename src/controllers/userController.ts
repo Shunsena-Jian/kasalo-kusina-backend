@@ -212,3 +212,29 @@ export async function updateUser(req: Request, res: Response) {
         }
     }
 }
+
+export async function getCurrentUser(req: Request, res: Response) {
+    try {
+        const userId = req.session.userId;
+        if (! userId) {
+            return res.error('User not logged in', 'Unauthorized', 401);
+        }
+
+        const user = await UserService.findUserById(userId);
+        if (! user) {
+            return res.error('User not found', 'Not Found', 404);
+        }
+
+        return res.success(user, 'Successfully retrieved current user details');
+    } catch (error) {
+        if (error instanceof Error) {
+            res.error(error.message, 'Internal Server Error', 500);
+        } else {
+            res.error(
+                'An unknown error occurred',
+                'Internal Server Error',
+                500
+            );
+        }
+    }
+}
