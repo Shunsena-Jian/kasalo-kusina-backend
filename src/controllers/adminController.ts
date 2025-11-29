@@ -15,17 +15,9 @@ export async function listUsers(req: Request, res:Response) {
 
         const result = await AdminService.listUsers(page, limit);
 
-        res.success(result, 'Successfully retrieved users', 200);
+        res.success(result);
     } catch (error) {
-        if (error instanceof Error) {
-            res.error(error.message, 'Internal Server Error', 500);
-        } else {
-            res.error(
-                'An unknown error occurred',
-                'Internal Server Error',
-                500
-            );
-        }
+        res.error(error);
     }
 }
 
@@ -41,30 +33,22 @@ export async function updateUser(req: Request, res:Response) {
                 req.session.userId === req.params.id
             )
         ) {
-            return res.error('You are not authorized to perform this action', 'Forbidden', 403);
+            return res.error('You are not authorized to perform this action', 403);
         }
 
         const errors = validationResult(req);
         if (! errors.isEmpty()) {
-            return res.error(errors.array(), 'Validation Error', 400);
+            return res.error(errors.array(), 400);
         }
 
         const response = await userService.updateUser(userId, req.body);
 
         if (! response) {
-            return res.error('User not found or update failed', 'Not Found', 404);
+            return res.error('User not found or update failed', 404);
         }
 
-        return res.success(response, 'User details updated successfully');
+        return res.success(response);
     } catch (error) {
-        if (error instanceof Error) {
-            res.error(error.message, 'Internal Server Error', 500);
-        } else {
-            res.error(
-                'An unknown error occurred',
-                'Internal Server Error',
-                500
-            );
-        }
+        res.error(error);
     }
 }

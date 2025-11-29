@@ -55,7 +55,7 @@ export const isAuthenticated = (
     if (req.session && req.session.userId) {
         return next();
     } else {
-        res.error('Forbidden: Please log in first.', 'Forbidden', 403);
+        res.error('Forbidden: Please log in first.', 403);
     }
 };
 
@@ -63,11 +63,7 @@ export const isSameUser = (req: Request, res: Response, next: NextFunction) => {
     if (req.session.userId === req.params.id) {
         return next();
     } else {
-        res.error(
-            'Forbidden: You are not authorized to perform this action.',
-            'Forbidden',
-            403
-        );
+        res.error('Forbidden: You are not authorized to perform this action.',403);
     }
 };
 
@@ -81,11 +77,7 @@ export const isAdmin = (
     ) {
         return next();
     } else {
-        res.error(
-            'Forbidden: You are not authorized to perform this action.',
-            'Forbidden',
-            403
-        );
+        res.error('Forbidden: You are not authorized to perform this action.',403);
     }
 }
 
@@ -100,11 +92,7 @@ export const isUserActive = (
     ) {
         return next();
     } else {
-        res.error(
-            'Forbidden: You are not authorized to perform this action.',
-            'Forbidden',
-             403
-        )
+        res.error('Forbidden: You are not authorized to perform this action.',403);
     }
 }
 
@@ -118,10 +106,6 @@ export const isSuperAdmin = (
     ) {
         return next();
     } else {
-        res.error(
-            'Forbidden: You are not authorized to perform this action.',
-            'Forbidden',
-              403
-        )
+        res.error('Forbidden: You are not authorized to perform this action.',403);
     }
 }

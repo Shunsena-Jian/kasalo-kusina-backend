@@ -6,39 +6,31 @@ export async function getUserDetails(req: Request, res: Response) {
     try {
         const userId = req.params.id;
         if (!userId) {
-            return res.error('User ID is required', 'Bad Request', 400);
+            return res.error('User ID is required', 400);
         }
 
         const user = await UserService.findUserById(userId);
         if (!user) {
-            return res.error('User not found', 'Not Found', 404);
+            return res.error('User not found', 404);
         }
 
-        res.success(user, 'User details retrieved successfully');
+        res.success(user);
     } catch (error) {
-        if (error instanceof Error) {
-            res.error(error.message, 'Internal Server Error', 500);
-        } else {
-            res.error(
-                'An unknown error occurred',
-                'Internal Server Error',
-                500
-            );
-        }
+        res.error(error);
     }
 }
 
 export async function createUser(req: Request, res: Response) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.error(errors.array(), 'Validation Error', 400);
+        return res.error(errors.array(), 400);
     }
 
     try {
         const user = await UserService.createUser(req.body);
 
         if (! user) {
-            res.error('Failed to create user', 'User Creation Error', 400);
+            res.error('Failed to create user', 400);
         }
 
         if (user && req.session) {
@@ -46,24 +38,16 @@ export async function createUser(req: Request, res: Response) {
             req.session.userType = user.user_type;
         }
 
-        res.success(user, 'User created successfully', 201);
+        res.success(user);
     } catch (error) {
-        if (error instanceof Error) {
-            res.error(error.message, 'Internal Server Error', 500);
-        } else {
-            res.error(
-                'An unknown error occurred',
-                'Internal Server Error',
-                500
-            );
-        }
+        res.error(error);
     }
 }
 
 export async function loginUser(req: Request, res: Response) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.error(errors.array(), 'Validation Error', 400);
+        return res.error(errors.array(), 400);
     }
 
     try {
@@ -75,20 +59,12 @@ export async function loginUser(req: Request, res: Response) {
         if (response) {
             req.session.userId = response.id;
             req.session.userType = response.user_type;
-            return res.success(response, 'Login successful', 200);
+            return res.success(response);
         }
 
-        res.error('Login failed', 'Unauthorized', 401);
+        res.error('Login failed', 401);
     } catch (error) {
-        if (error instanceof Error) {
-            res.error(error.message, 'Internal Server Error', 500);
-        } else {
-            res.error(
-                'An unknown error occurred',
-                'Internal Server Error',
-                500
-            );
-        }
+        res.error(error);
     }
 }
 
@@ -100,32 +76,22 @@ export async function logoutUser(req: Request, res: Response) {
                     if (err instanceof Error) {
                         return res.error(
                             err.message,
-                            'Internal Server Error',
                             500
                         );
                     }
                     return res.error(
                         'An unknown error occurred',
-                        'Internal Server Error',
                         500
                     );
                 }
 
-                res.success(null, 'User logged out successfully');
+                res.success(true);
             });
         } else {
-            res.success(null, 'User already logged out');
+            res.success(true);
         }
     } catch (error) {
-        if (error instanceof Error) {
-            res.error(error.message, 'Internal Server Error', 500);
-        } else {
-            res.error(
-                'An unknown error occurred',
-                'Internal Server Error',
-                500
-            );
-        }
+        res.error(error);
     }
 }
 
@@ -134,12 +100,12 @@ export async function deleteUser(req: Request, res: Response) {
         const userId = req.params.id;
 
         if (!userId) {
-            return res.error('User ID is required', 'Bad Request', 400);
+            return res.error('User ID is required');
         }
 
         const response = await UserService.destroyUser(userId);
         if (!response) {
-            return res.error('User not found', 'Not Found', 404);
+            return res.error('User not found');
         }
 
         if (req.session && req.session.userId === userId) {
@@ -147,69 +113,43 @@ export async function deleteUser(req: Request, res: Response) {
                 if (err) {
                     if (err instanceof Error) {
                         return res.error(
-                            err.message,
-                            'Internal Server Error',
-                            500
+                            err.message
                         );
                     }
-                    return res.error(
-                        'An unknown error occurred',
-                        'Internal Server Error',
-                        500
-                    );
+                    return res.error('An unknown error occurred');
                 }
 
-                res.success(null, 'User deleted successfully');
+                res.success(null);
             });
         } else {
-            res.success(null, 'User deleted successfully');
+            res.success(null);
         }
     } catch (error) {
-        if (error instanceof Error) {
-            res.error(error.message, 'Internal Server Error', 500);
-        } else {
-            res.error(
-                'An unknown error occurred',
-                'Internal Server Error',
-                500
-            );
-        }
+        res.error(error);
     }
 }
 
 export async function updateUser(req: Request, res: Response) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.error(errors.array(), 'Validation Error', 400);
+        return res.error(errors.array());
     }
 
     try {
         const userId = req.params.id;
         if (!userId) {
-            return res.error('User ID is required', 'Bad Request', 400);
+            return res.error('User ID is required');
         }
 
         const updatedUser = await UserService.updateUser(userId, req.body);
 
         if (!updatedUser) {
-            return res.error(
-                'User not found or update failed',
-                'Not Found',
-                404
-            );
+            return res.error('User not found or update failed');
         }
 
-        res.success(updatedUser, 'User details updated successfully');
+        res.success(updatedUser);
     } catch (error) {
-        if (error instanceof Error) {
-            res.error(error.message, 'Internal Server Error', 500);
-        } else {
-            res.error(
-                'An unknown error occurred',
-                'Internal Server Error',
-                500
-            );
-        }
+        res.error(error);
     }
 }
 
@@ -217,24 +157,16 @@ export async function getCurrentUser(req: Request, res: Response) {
     try {
         const userId = req.session.userId;
         if (! userId) {
-            return res.error('User not logged in', 'Unauthorized', 401);
+            return res.error('User not logged in', 401);
         }
 
         const user = await UserService.findUserById(userId);
         if (! user) {
-            return res.error('User not found', 'Not Found', 404);
+            return res.error('User not found', 404);
         }
 
-        return res.success(user, 'Successfully retrieved current user details');
+        return res.success(user);
     } catch (error) {
-        if (error instanceof Error) {
-            res.error(error.message, 'Internal Server Error', 500);
-        } else {
-            res.error(
-                'An unknown error occurred',
-                'Internal Server Error',
-                500
-            );
-        }
+        res.error(error);
     }
 }
