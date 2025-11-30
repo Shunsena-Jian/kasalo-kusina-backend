@@ -3,8 +3,12 @@ import { type IRecipe } from "../types/recipe.js";
 import {RECIPES_STATUS} from "../constants/recipes.js";
 
 class RecipeService {
-    async listRecipes() {
-        return await RecipeRepository.listRecipes();
+    async listRecipes(query?: string) {
+        return await RecipeRepository.listRecipes(query);
+    }
+
+    async getRecipe(id: string) {
+        return await RecipeRepository.getRecipeById(id);
     }
 
     async createRecipe(userId: string, body: Partial<IRecipe>) {

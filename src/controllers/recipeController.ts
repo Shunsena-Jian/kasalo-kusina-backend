@@ -19,7 +19,17 @@ export async function createRecipe(req: Request, res: Response) {
 
 export async function getRecipe(req: Request, res: Response) {
     try {
+        const { id } = req.params;
+        if (! id) {
+            return res.error('Recipe ID is required', 400);
+        }
 
+        const recipe = await RecipeService.getRecipe(id);
+        if (! recipe) {
+            return res.error('Recipe not found', 404);
+        }
+
+        return res.success(recipe);
     } catch (error) {
         return res.error(error);
     }
@@ -27,7 +37,9 @@ export async function getRecipe(req: Request, res: Response) {
 
 export async function listRecipes(req: Request, res: Response) {
     try {
-        return res.success(await RecipeService.listRecipes());
+        const query = req.query.q as string;
+        console.log(query);
+        return res.success(await RecipeService.listRecipes(query));
     } catch (error) {
         return res.error(error);
     }
