@@ -24,3 +24,11 @@ export async function getRecipe(req: Request, res: Response) {
         return res.error(error);
     }
 }
+
+export async function listRecipes(req: Request, res: Response) {
+    try {
+        return res.success(await RecipeService.listRecipes());
+    } catch (error) {
+        return res.error(error);
+    }
+}

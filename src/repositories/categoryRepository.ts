@@ -7,7 +7,7 @@ import {
 
 class CategoryRepository {
     async listCategories(): Promise<ICategory[]> {
-        return Category.find().sort({ createdAt: -1 });
+        return Category.find().sort({ created_at: -1 });
     }
 
     async findCategoryWhere(where: CategoryWhere): Promise<ICategory | null> {
