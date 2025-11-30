@@ -1,9 +1,9 @@
 import express from 'express';
-
-import {isAuthenticated, isModerator} from "../middlewares/session.js";
+import { createRecipeRules } from '../rules/recipe.js';
+import { isAuthenticated } from "../middlewares/session.js";
 
 import {
-    createRecipe
+    createRecipe, getRecipe
 } from '../controllers/recipeController.js';
 
 const router = express.Router();
@@ -12,6 +12,8 @@ router.get('/', (req, res) => {
     res.send('This is GET recipes');
 });
 
-router.post('/', isAuthenticated, isModerator, createRecipe);
+router.get('/:id', getRecipe);
+
+router.post('/', ...createRecipeRules, isAuthenticated, createRecipe);
 
 export default router;

@@ -1,9 +1,10 @@
 import knex from '../config/knex.js';
-import { v4 as uuid } from 'uuid';
+import Recipe from '../models/Recipe.js';
 
 class RecipeRepository {
-    async insertRecipe() {
-
+    async insertRecipe(recipeData: any) {
+        const recipe = new Recipe(recipeData);
+        return await recipe.save();
     }
 }
 
