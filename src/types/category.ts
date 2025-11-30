@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import { Document, type FilterQuery} from "mongoose";
 
 export interface ICategory extends Document {
     name: string;
@@ -8,3 +8,7 @@ export interface ICategory extends Document {
     created_at: Date;
     updated_at: Date;
 }
+
+export type CreateCategory = Pick<ICategory, 'name' | 'slug' | 'description' | 'image'>;
+
+export type CategoryWhere = FilterQuery<ICategory>;

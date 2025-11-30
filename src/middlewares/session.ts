@@ -109,3 +109,19 @@ export const isSuperAdmin = (
         res.error('Forbidden: You are not authorized to perform this action.',403);
     }
 }
+
+export const isModerator = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+)=> {
+    if (req.session
+        && (req.session.userType === USER_TYPES.MODERATOR
+            || req.session.userType === USER_TYPES.ADMIN
+            || req.session.userType === USER_TYPES.SUPER_ADMIN)
+    ) {
+        return next();
+    } else {
+        res.error('Forbidden: You are not authorized to perform this action.',403);
+    }
+}

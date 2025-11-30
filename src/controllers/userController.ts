@@ -155,10 +155,7 @@ export async function updateUser(req: Request, res: Response) {
 
 export async function getCurrentUser(req: Request, res: Response) {
     try {
-        const userId = req.session.userId;
-        if (! userId) {
-            return res.error('User not logged in', 401);
-        }
+        const userId = req.session.userId!;
 
         const user = await UserService.findUserById(userId);
         if (! user) {
