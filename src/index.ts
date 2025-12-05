@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import { corsOptions } from "./config/cors.js";
 
 import adminRoutes from './routes/admin.js';
 import userRoutes from './routes/users.js';
@@ -19,12 +20,7 @@ mongoDB().then(() => {
 
 const app = express();
 
-app.use(
-    cors({
-        origin: ['http://localhost:3001'],
-        credentials: true,
-    })
-);
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(apiResponse);
