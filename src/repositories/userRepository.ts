@@ -5,6 +5,7 @@ import {
     type UpdateUser,
     type UserWhere,
 } from '../types/user.js';
+import { getCurrentUnixTimeStamp } from "../utils/dateUtils.js";
 
 const table = 'users';
 
@@ -19,13 +20,15 @@ class UserRepository {
             password,
             email,
             user_type,
+            created_at: getCurrentUnixTimeStamp(),
+            updated_at: getCurrentUnixTimeStamp()
         });
     }
 
     async updateUser(where: UserWhere, updatedUser: UpdateUser) {
         return knex(table).where(where).update({
             ...updatedUser,
-            updated_at: knex.fn.now(),
+            updated_at: getCurrentUnixTimeStamp(),
         });
     }
 

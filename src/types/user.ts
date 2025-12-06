@@ -5,8 +5,8 @@ export interface User {
     user_type: string;
     user_status?: string;
     password?: string;
-    created_at: Date;
-    updated_at: Date;
+    created_at: number;
+    updated_at: number;
 }
 
 export type CreateUser = Pick<User, 'username' | 'email' | 'user_type' | 'user_status' | 'password'>;

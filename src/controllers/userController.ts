@@ -62,7 +62,7 @@ export async function loginUser(req: Request, res: Response) {
             return res.success(response);
         }
 
-        res.error('Login failed', 401);
+        res.error('Incorrect credentials', 401);
     } catch (error) {
         res.error(error);
     }
