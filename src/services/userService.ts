@@ -1,7 +1,7 @@
 import UserRepository from '../repositories/userRepository.js';
 import bcrypt from 'bcrypt';
 import { type CreateUser, type PublicUser, type UpdateUser } from '../types/user.js';
-import { USER_STATUSES } from "../constants/users.js";
+import {USER_STATUSES, USER_TYPES} from "../constants/users.js";
 
 const saltRounds = 10;
 
@@ -28,7 +28,7 @@ class UserService {
         const newUser: CreateUser = {
             username: user.username,
             email: user.email,
-            user_type: user.user_type,
+            user_type: USER_TYPES.KASALO,
             user_status: USER_STATUSES.ACTIVE,
             password: hashedPassword,
         };

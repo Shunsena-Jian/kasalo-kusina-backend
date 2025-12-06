@@ -21,6 +21,7 @@ export async function getUserDetails(req: Request, res: Response) {
 }
 
 export async function createUser(req: Request, res: Response) {
+    console.log(req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.error(errors.array(), 400);

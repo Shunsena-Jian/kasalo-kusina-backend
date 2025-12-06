@@ -22,25 +22,10 @@ export const createUserRules = [
                 return Promise.reject('Email already exists');
             }
         }),
-    body('user_type')
-        .notEmpty()
-        .withMessage('User type is required')
-        .isIn(Object.values(USER_TYPES))
-        .withMessage('Invalid user type'),
     body('password')
         .notEmpty()
         .isLength({ min: 8 })
         .withMessage('Password must be at least 8 characters long'),
-    body('confirm_password')
-        .notEmpty()
-        .isLength({ min: 8 })
-        .withMessage('Confirm password must be at least 8 characters long')
-        .custom((value, { req }) => {
-            if (value !== req.body.password) {
-                throw new Error('Password confirmation does not match password.');
-            }
-            return true;
-        })
 ];
 
 export const updateUserRules = [

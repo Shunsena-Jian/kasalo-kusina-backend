@@ -11,7 +11,7 @@ const table = 'users';
 
 class UserRepository {
     async createUser(user: CreateUser) {
-        const { username, password, email, user_type } = user;
+        const { username, password, email, user_type, user_status } = user;
         const id = uuid();
 
         return knex(table).insert({
@@ -20,6 +20,7 @@ class UserRepository {
             password,
             email,
             user_type,
+            user_status,
             created_at: getCurrentUnixTimeStamp(),
             updated_at: getCurrentUnixTimeStamp()
         });
