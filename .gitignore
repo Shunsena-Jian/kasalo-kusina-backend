@@ -83,6 +83,9 @@ web_modules/
 .env
 .env.test
 
+# GEMINI Memory
+GEMINI.md
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
@@ -125,4 +128,4 @@ dist
 .pnp.*
 
 # IDE - JetBrains
-.idea/
+.idea/`
