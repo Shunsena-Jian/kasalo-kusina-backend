@@ -1,12 +1,10 @@
 import knex from 'knex';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import 'dotenv/config';
 
 const dbHost = process.env.DB_HOST;
 const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;
-const dbName = process.env.DB_NAME;
+const dbName = process.env.MYSQL_DB_NAME ||  process.env.DB_NAME;
 
 if (!dbHost || !dbUser || !dbPassword || !dbName) {
     throw new Error('Database environment variables are not defined');

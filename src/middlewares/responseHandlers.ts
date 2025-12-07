@@ -1,19 +1,23 @@
 import { type Request, type Response, type NextFunction } from 'express';
 
-function apiResponse(req: Request, res: Response, next: NextFunction) {
-    res.success = (data, statusCode = 200) => {
+function apiResponse(req: Request, res: Response, next: NextFunction): void {
+    res.success = (data: unknown, statusCode = 200) => {
         res.status(statusCode).json({
             data,
         });
     };
 
-    res.error = (input, statusCode = 500) => {
-        let errors = input;
+    res.error = (input: string | Error | string[], statusCode = 500) => {
+        let errors: string | string[] = 'An unknown error occurred.';
 
         if (input instanceof Error) {
             errors = input.message;
-        } else if (! input) {
-            errors = 'An unknown error occurred.';
+        } else if (typeof input === 'string') {
+            errors = input;
+        } else if (Array.isArray(input)) {
+            errors = input as string[];
+        } else if (input && typeof input === 'object' && 'message' in input) {
+            errors = String((input as { message: unknown }).message)
         }
 
         res.status(statusCode).json({
@@ -22,7 +26,7 @@ function apiResponse(req: Request, res: Response, next: NextFunction) {
         });
     }
 
-    return next();
+    next();
 }
 
 export default apiResponse;

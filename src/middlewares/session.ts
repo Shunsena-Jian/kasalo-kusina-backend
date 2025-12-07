@@ -6,6 +6,7 @@ import { REDIS } from '../constants/session.js';
 import { ENVIRONMENTS } from '../constants/environments.js';
 import { type Request, type Response, type NextFunction } from 'express';
 import {USER_STATUSES, USER_TYPES} from "../constants/users.js";
+import {ERROR_MESSAGE} from "../constants/errors.js";
 
 const redisUrl = process.env.REDIS_URL;
 if (!redisUrl) {
@@ -18,7 +19,7 @@ const redisClient = createClient({
 redisClient
     .connect()
     .then(() => console.log('Redis connected'))
-    .catch(console.error);
+    .catch((err) => console.error('Redis Connection Error:', err));
 
 redisClient.on('error', (err) => {
     console.error('Redis Client Error: ', err);
@@ -52,18 +53,22 @@ export const isAuthenticated = (
     res: Response,
     next: NextFunction
 ) => {
-    if (req.session && req.session.userId) {
+    if (req.session?.userId) {
         return next();
     } else {
-        res.error('Forbidden: Please log in first.', 403);
+        res.error(ERROR_MESSAGE.LOGIN_REQUIRED, 403);
     }
 };
 
-export const isSameUser = (req: Request, res: Response, next: NextFunction) => {
-    if (req.session.userId === req.params.id) {
+export const isSameUser = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    if (req.session?.userId && String(req.session.userId) === req.params.id) {
         return next();
     } else {
-        res.error('Forbidden: You are not authorized to perform this action.',403);
+        res.error(ERROR_MESSAGE.UNAUTHORIZED,403);
     }
 };
 
@@ -72,12 +77,13 @@ export const isAdmin = (
     res: Response,
     next: NextFunction
 ) => {
-    if (req.session
-        && (req.session.userType === USER_TYPES.ADMIN || req.session.userType === USER_TYPES.SUPER_ADMIN)
+    if (
+        req.session?.userId &&
+        (req.session.userType === USER_TYPES.ADMIN || req.session.userType === USER_TYPES.SUPER_ADMIN)
     ) {
         return next();
     } else {
-        res.error('Forbidden: You are not authorized to perform this action.',403);
+        res.error(ERROR_MESSAGE.UNAUTHORIZED,403);
     }
 }
 
@@ -86,13 +92,10 @@ export const isUserActive = (
     res: Response,
     next: NextFunction
 )=> {
-    if (
-        req.session
-        &&  req.session.userStatus === USER_STATUSES.ACTIVE
-    ) {
+    if (req.session?.userStatus === USER_STATUSES.ACTIVE) {
         return next();
     } else {
-        res.error('Forbidden: You are not authorized to perform this action.',403);
+        res.error(ERROR_MESSAGE.UNAUTHORIZED,403);
     }
 }
 
@@ -101,12 +104,10 @@ export const isSuperAdmin = (
     res: Response,
     next: NextFunction
 ) => {
-    if (req.session
-        && req.session.userType === USER_TYPES.SUPER_ADMIN
-    ) {
+    if (req.session?.userType === USER_TYPES.SUPER_ADMIN) {
         return next();
     } else {
-        res.error('Forbidden: You are not authorized to perform this action.',403);
+        res.error(ERROR_MESSAGE.UNAUTHORIZED,403);
     }
 }
 
@@ -115,13 +116,15 @@ export const isModerator = (
     res: Response,
     next: NextFunction
 )=> {
-    if (req.session
-        && (req.session.userType === USER_TYPES.MODERATOR
-            || req.session.userType === USER_TYPES.ADMIN
-            || req.session.userType === USER_TYPES.SUPER_ADMIN)
+    const { userType } = req.session || {};
+
+    if (
+        userType === USER_TYPES.ADMIN ||
+        userType === USER_TYPES.SUPER_ADMIN ||
+        userType === USER_TYPES.MODERATOR
     ) {
         return next();
     } else {
-        res.error('Forbidden: You are not authorized to perform this action.',403);
+        res.error(ERROR_MESSAGE.UNAUTHORIZED,403);
     }
 }

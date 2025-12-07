@@ -4,7 +4,7 @@
         "host": { "ENV": "DB_HOST" },
         "user": { "ENV": "DB_USER" },
         "password": { "ENV": "DB_PASSWORD" },
-        "database": { "ENV": "DB_NAME" }
+        "database": { "ENV": "MYSQL_DB_NAME" }
     },
     "db-migrate": {
         "esm": true
