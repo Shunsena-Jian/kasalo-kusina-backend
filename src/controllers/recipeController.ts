@@ -63,7 +63,7 @@ export async function newRecipes(req: Request, res: Response) {
 
 export async function highRatedRecipes(req: Request, res: Response) {
     try {
-        return res.success(await RecipeService.getHighRatedRecipes);
+        return res.success(await RecipeService.getHighRatedRecipes());
     } catch (error) {
         return res.error(error);
     }
