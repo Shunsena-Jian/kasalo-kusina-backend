@@ -1,6 +1,7 @@
 import { type Request, type Response } from 'express';
 import { validationResult } from 'express-validator';
 import RecipeService from '../services/recipeService.js';
+import Recipe from "../models/Recipe.js";
 
 export async function createRecipe(req: Request, res: Response) {
     const errors = validationResult(req);
@@ -38,8 +39,31 @@ export async function getRecipe(req: Request, res: Response) {
 export async function listRecipes(req: Request, res: Response) {
     try {
         const query = req.query.q as string;
-        console.log(query);
         return res.success(await RecipeService.listRecipes(query));
+    } catch (error) {
+        return res.error(error);
+    }
+}
+
+export async function featuredRecipes(req: Request, res: Response) {
+    try {
+        return res.success(await RecipeService.getFeaturedRecipes());
+    } catch (error) {
+        return res.error(error);
+    }
+}
+
+export async function newRecipes(req: Request, res: Response) {
+    try {
+        return res.success(await RecipeService.getNewRecipes());
+    } catch (error) {
+        return res.error(error);
+    }
+}
+
+export async function highRatedRecipes(req: Request, res: Response) {
+    try {
+        return res.success(await RecipeService.getHighRatedRecipes);
     } catch (error) {
         return res.error(error);
     }

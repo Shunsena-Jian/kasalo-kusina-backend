@@ -32,7 +32,6 @@
         "strict": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-        "allowImportingTsExtensions": true,
         "jsx": "react-jsx",
         "verbatimModuleSyntax": true,
         "isolatedModules": true,

@@ -25,6 +25,7 @@ export interface IRecipe extends Document {
     difficulty: string;
     tags: Types.ObjectId[];
     categories: Types.ObjectId[];
+    featured: boolean;
     status: 'published' | 'draft' | 'archived';
     average_rating: number;
     review_count: number;

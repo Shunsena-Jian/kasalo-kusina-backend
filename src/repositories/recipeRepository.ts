@@ -10,6 +10,14 @@ class RecipeRepository {
         return Recipe.find(filter).sort({ average_rating: -1 });
     }
 
+    async getFeaturedRecipes() {
+        return Recipe.find({ status: RECIPES_STATUS.PUBLISHED, featured: true }).sort({ created_at: -1 });
+    }
+
+    async getNewRecipes() {
+        return Recipe.find({ status: RECIPES_STATUS.PUBLISHED }).sort({ created_at: -1 });
+    }
+
     async insertRecipe(recipeData: any) {
         const recipe = new Recipe(recipeData);
         return await recipe.save();

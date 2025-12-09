@@ -34,6 +34,7 @@ const RecipeSchema: Schema = new Schema(
         difficulty: { type: String, required: true },
         tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
         categories: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
+        featured: { type: Boolean, default: false },
         status: {
             type: String,
             enum: ['published', 'draft', 'archived'],

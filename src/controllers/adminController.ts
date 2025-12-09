@@ -9,7 +9,7 @@ export async function listUsers(req: Request, res:Response) {
     try {
         const page = parseInt(req.query.page as string) || 1;
         let limit = parseInt(req.query.limit as string) || 10;
-        if (! ALLOWED_LIMITS.includes(limit)) {
+        if (! (ALLOWED_LIMITS as readonly number[]).includes(limit)) {
             limit = DEFAULT_LIMIT;
         }
 

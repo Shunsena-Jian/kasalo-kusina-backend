@@ -2,6 +2,8 @@ export interface User {
     id: string;
     username: string;
     email: string;
+    first_name?: string;
+    last_name?: string;
     user_type: string;
     user_status?: string;
     password?: string;
@@ -9,7 +11,7 @@ export interface User {
     updated_at: number;
 }
 
-export type CreateUser = Pick<User, 'username' | 'email' | 'user_type' | 'user_status' | 'password'>;
+export type CreateUser = Pick<User, 'username' | 'email' | 'first_name' | 'last_name' | 'user_type' | 'user_status' | 'password'>;
 
 export type UpdateUser = Partial<Omit<User, 'id' | 'created_at' | 'updated_at'>>;
 

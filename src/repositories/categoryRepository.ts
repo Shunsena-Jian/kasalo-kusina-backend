@@ -19,6 +19,10 @@ class CategoryRepository {
 
         return newCategory.save();
     }
+
+    async getCategoriesByIds(ids: string[]) {
+        return Category.find({ _id: { $in: ids } });
+    }
 }
 
 export default new CategoryRepository();

@@ -1,10 +1,26 @@
 import RecipeRepository from '../repositories/recipeRepository.js';
+import UserRepository from '../repositories/userRepository.js';
 import { type IRecipe } from "../types/recipe.js";
 import {RECIPES_STATUS} from "../constants/recipes.js";
 
 class RecipeService {
     async listRecipes(query?: string) {
         return await RecipeRepository.listRecipes(query);
+    }
+
+    async getFeaturedRecipes() {
+        const recipes = await RecipeRepository.getFeaturedRecipes();
+        return this.transformRecipes(recipes);
+    }
+
+    async getNewRecipes() {
+        const recipes = await RecipeRepository.getNewRecipes();
+        return this.transformRecipes(recipes);
+    }
+
+    async getHighRatedRecipes() {
+        const recipes = await RecipeRepository.listRecipes();
+        return this.transformRecipes(recipes);
     }
 
     async getRecipe(id: string) {
@@ -16,6 +32,32 @@ class RecipeService {
             ...body,
             user_id: userId,
             status: RECIPES_STATUS.DRAFT
+        });
+    }
+
+    private async transformRecipes(recipes: any[]) {
+        if (!recipes.length) {
+            return [];
+        }
+
+        const userIds = [...new Set(recipes.map(r => r.user_id).filter(id => id))];
+        const users = await UserRepository.getUsersByIds(userIds);
+        const userMap = new Map(users.map(u => [u.id, u]));
+
+        return recipes.map(recipe => {
+            const user = userMap.get(recipe.user_id);
+            return {
+                user_name: user ? `${user.first_name} ${user.last_name}` : null,
+                title: recipe.title,
+                description: recipe.description,
+                images: recipe.images?.length ? recipe.images[0] : null,
+                prep_time_min: recipe.prep_time_min,
+                cook_time_min: recipe.cook_time_min,
+                difficulty: recipe.difficulty,
+                categories: recipe.categories,
+                tags: recipe.tags,
+                average_rating: recipe.average_rating
+            };
         });
     }
 }

@@ -50,6 +50,10 @@ class UserRepository {
         const result = await knex(table).count({ count: '*' }).first();
         return Number(result?.count) || 0;
     }
+
+    async getUsersByIds(ids: string[]) {
+        return knex(table).whereIn('id', ids).select('id', 'first_name', 'last_name');
+    }
 }
 
 export default new UserRepository();
