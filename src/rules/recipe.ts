@@ -15,8 +15,7 @@ export const createRecipeRules = [
     body('instructions.*.text').notEmpty().isString().withMessage('Instruction text must be a string'),
     body('instructions.*.image').optional().isString().withMessage('Instruction image must be a string'),
 
-    body('images').optional().isArray().withMessage('Images must be an array'),
-    body('images.*').optional().isString().withMessage('Image must be a string URL'),
+    body('image').optional().isString().withMessage('Image must be a string URL'),
 
     body('prep_time_min').notEmpty().isNumeric().withMessage('Preparation time must be a number'),
     body('cook_time_min').notEmpty().isNumeric().withMessage('Cooking time must be a number'),

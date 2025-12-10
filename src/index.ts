@@ -28,6 +28,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(apiResponse);
 app.use(sessionMiddleware);
+app.use('/uploads', express.static('uploads'));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);

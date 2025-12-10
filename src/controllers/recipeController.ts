@@ -12,6 +12,10 @@ export async function createRecipe(req: Request, res: Response) {
     try {
         const userId = req.session.userId!;
 
+        if (req.file) {
+             req.body.image = `/uploads/${req.file.filename}`;
+        }
+
         return res.success(await RecipeService.createRecipe(userId, req.body));
     } catch (error) {
         return res.error(error);

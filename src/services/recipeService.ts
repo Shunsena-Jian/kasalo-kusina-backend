@@ -50,7 +50,7 @@ class RecipeService {
                 user_name: user ? `${user.first_name} ${user.last_name}` : null,
                 title: recipe.title,
                 description: recipe.description,
-                images: recipe.images?.length ? recipe.images[0] : null,
+                image: recipe.image || null,
                 prep_time_min: recipe.prep_time_min,
                 cook_time_min: recipe.cook_time_min,
                 difficulty: recipe.difficulty,

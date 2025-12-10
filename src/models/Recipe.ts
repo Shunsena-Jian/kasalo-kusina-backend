@@ -22,12 +22,7 @@ const RecipeSchema: Schema = new Schema(
                 _id: false
             }
         ],
-        images: [
-            {
-                type: String,
-                _id: false
-            }
-        ],
+        image: { type: String, required: false },
         prep_time_min: { type: Number, required: true },
         cook_time_min: { type: Number, required: true },
         servings: { type: Number, required: true },

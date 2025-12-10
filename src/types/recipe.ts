@@ -18,7 +18,7 @@ export interface IRecipe extends Document {
     description: string;
     ingredients: IRecipeIngredient[];
     instructions: IRecipeInstruction[];
-    images?: string[];
+    image?: string;
     prep_time_min: number;
     cook_time_min: number;
     servings: number;
