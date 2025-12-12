@@ -4,7 +4,7 @@ import knex from '../config/knex.js';
 
 export function setupGracefulShutdown(server: Server) {
     const gracefulShutdown = async (signal: string) => {
-        console.log(`Recevied ${signal}. Closing server...`);
+        console.log(`Received ${signal}. Closing server...`);
 
         server.close(async() => {
             console.log('HTTP server closed.');
