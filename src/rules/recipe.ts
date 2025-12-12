@@ -22,10 +22,10 @@ export const createRecipeRules = [
     body('servings').notEmpty().isNumeric().withMessage('Servings must be a number'),
     body('difficulty').notEmpty().isString().withMessage('Difficulty must be a string'),
 
-    body('tags').optional().isArray().withMessage('Tags must be an array'),
+    body('tags').isArray().withMessage('Tags must be an array'),
     body('tags.*').isMongoId().withMessage('Tags must be valid Mongo IDs'),
 
-    body('categories').optional().isArray().withMessage('Categories must be an array'),
+    body('categories').isArray().withMessage('Categories must be an array'),
     body('categories.*').isMongoId().withMessage('Categories must be valid Mongo IDs')
         .custom(async (value) => {
             const category = await CategoryRepository.findCategoryWhere({ _id: value });

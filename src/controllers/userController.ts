@@ -34,6 +34,12 @@ export async function createUser(req: Request, res: Response) {
     if (user && req.session) {
         req.session.userId = user.id;
         req.session.userType = user.user_type;
+        return req.session.save((err) => {
+            if (err) {
+                console.error('Session save error:', err);
+            }
+            res.success(user);
+        });
     }
 
     res.success(user);
@@ -53,7 +59,15 @@ export async function loginUser(req: Request, res: Response) {
     if (response) {
         req.session.userId = response.id;
         req.session.userType = response.user_type;
-        return res.success(response);
+
+        return req.session.save((err) => {
+            if (err) {
+                console.error('Session save error:', err);
+                return res.error('Failed to save session', 500);
+            }
+
+            res.success(response);
+        });
     }
 
     res.error('Incorrect credentials', 401);
