@@ -2,6 +2,9 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 
+// Utils
+import {setupGracefulShutdown} from "./utils/shutdownUtils.js";
+
 // Configs
 import { corsOptions } from "./config/cors.js";
 import mongoDB from './config/mongodb.js';
@@ -41,6 +44,8 @@ app.use('/api/categories', categoryRoutes);
 
 app.use(errorHandler);
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server started in ${PORT}`);
 });
+
+setupGracefulShutdown(server);
