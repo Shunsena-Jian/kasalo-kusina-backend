@@ -1,5 +1,7 @@
 import express from 'express';
 
+import {asyncHandler} from "../utils/asyncHandler.js";
+
 import { loginUserRules } from '../rules/auth.js';
 import { createUserRules } from '../rules/user.js';
 
@@ -14,9 +16,9 @@ import {
 
 const router = express.Router();
 
-router.post('/login', ...loginUserRules, loginUser);
-router.post('/register', ...createUserRules, createUser);
-router.get('/me', isAuthenticated, getCurrentUser);
-router.post('/logout', logoutUser);
+router.post('/login', ...loginUserRules, asyncHandler(loginUser));
+router.post('/register', ...createUserRules, asyncHandler(createUser));
+router.get('/me', isAuthenticated, asyncHandler(getCurrentUser));
+router.post('/logout', asyncHandler(logoutUser));
 
 export default router;

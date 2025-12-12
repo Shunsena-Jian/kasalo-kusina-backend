@@ -4,11 +4,7 @@ import CategoryService from '../services/categoryService.js';
 import CategoryRepository from "../repositories/categoryRepository.js";
 
 export async function listCategories(req: Request, res: Response) {
-    try {
-        return res.success(await CategoryService.listCategories());
-    } catch (error) {
-        return res.error(error);
-    }
+    return res.success(await CategoryService.listCategories());
 }
 
 export async function createCategory(req: Request, res: Response) {
@@ -17,10 +13,6 @@ export async function createCategory(req: Request, res: Response) {
         return res.error(errors.array(), 400);
     }
 
-    try {
-        const result = await CategoryRepository.insertCategory(req.body);
-        return res.success(result);
-    } catch (error) {
-        return res.error(error);
-    }
+    const result = await CategoryRepository.insertCategory(req.body);
+    return res.success(result);
 }

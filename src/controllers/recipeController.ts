@@ -23,52 +23,32 @@ export async function createRecipe(req: Request, res: Response) {
 }
 
 export async function getRecipe(req: Request, res: Response) {
-    try {
-        const { id } = req.params;
-        if (! id) {
-            return res.error('Recipe ID is required', 400);
-        }
-
-        const recipe = await RecipeService.getRecipe(id);
-        if (! recipe) {
-            return res.error('Recipe not found', 404);
-        }
-
-        return res.success(recipe);
-    } catch (error) {
-        return res.error(error);
+    const { id } = req.params;
+    if (! id) {
+        return res.error('Recipe ID is required', 400);
     }
+
+    const recipe = await RecipeService.getRecipe(id);
+    if (! recipe) {
+        return res.error('Recipe not found', 404);
+    }
+
+    return res.success(recipe);
 }
 
 export async function listRecipes(req: Request, res: Response) {
-    try {
-        const query = req.query.q as string;
-        return res.success(await RecipeService.listRecipes(query));
-    } catch (error) {
-        return res.error(error);
-    }
+    const query = req.query.q as string;
+    return res.success(await RecipeService.listRecipes(query));
 }
 
 export async function featuredRecipes(req: Request, res: Response) {
-    try {
-        return res.success(await RecipeService.getFeaturedRecipes());
-    } catch (error) {
-        return res.error(error);
-    }
+    return res.success(await RecipeService.getFeaturedRecipes());
 }
 
 export async function newRecipes(req: Request, res: Response) {
-    try {
-        return res.success(await RecipeService.getNewRecipes());
-    } catch (error) {
-        return res.error(error);
-    }
+    return res.success(await RecipeService.getNewRecipes());
 }
 
 export async function highRatedRecipes(req: Request, res: Response) {
-    try {
-        return res.success(await RecipeService.getHighRatedRecipes());
-    } catch (error) {
-        return res.error(error);
-    }
+    return res.success(await RecipeService.getHighRatedRecipes());
 }

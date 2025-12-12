@@ -3,17 +3,24 @@ import { createRecipeRules } from '../rules/recipe.js';
 import { isAuthenticated } from "../middlewares/session.js";
 import upload from '../middlewares/upload.js';
 
+import {asyncHandler} from "../utils/asyncHandler.js";
+
 import {
-    createRecipe, getRecipe, listRecipes, featuredRecipes, newRecipes, highRatedRecipes
+    createRecipe,
+    getRecipe,
+    listRecipes,
+    featuredRecipes,
+    newRecipes,
+    highRatedRecipes
 } from '../controllers/recipeController.js';
 
 const router = express.Router();
 
-router.get('/featured', featuredRecipes);
-router.get('/new', newRecipes);
-router.get('/high-rated', highRatedRecipes);
-router.get('/:id', getRecipe);
-router.get('/', listRecipes);
+router.get('/featured', asyncHandler(featuredRecipes));
+router.get('/new', asyncHandler(newRecipes));
+router.get('/high-rated', asyncHandler(highRatedRecipes));
+router.get('/:id', asyncHandler(getRecipe));
+router.get('/', asyncHandler(listRecipes));
 
 // Inline middleware to parse JSON strings from form-data before validation
 const parseMultipartBody = (req: express.Request, res: express.Response, next: express.NextFunction) => {

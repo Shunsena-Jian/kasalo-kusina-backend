@@ -9,6 +9,7 @@ import mongoDB from './config/mongodb.js';
 // Middlewares
 import { sessionMiddleware } from './middlewares/session.js';
 import apiResponse from './middlewares/responseHandlers.js';
+import { errorHandler } from "./middlewares/errorHandler.js";
 
 // Routes
 import adminRoutes from './routes/admin.js';
@@ -35,6 +36,8 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/categories', categoryRoutes);
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
     console.log(`Server started in ${PORT}`);
