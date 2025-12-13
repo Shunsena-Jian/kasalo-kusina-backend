@@ -21,6 +21,7 @@ import userRoutes from './routes/users.js';
 import recipeRoutes from './routes/recipes.js';
 import authRoutes from './routes/auth.js';
 import categoryRoutes from './routes/category.js';
+import tagRoutes from './routes/tags.js';
 
 mongoDB().then(() => {
     console.log('MongoDB connected');
@@ -41,6 +42,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/tags', tagRoutes)
 
 app.use(errorHandler);
 

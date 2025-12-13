@@ -1,5 +1,6 @@
 import RecipeRepository from '../repositories/recipeRepository.js';
 import UserRepository from '../repositories/userRepository.js';
+import TagRepository from '../repositories/tagRepository.js';
 import { type IRecipe } from "../types/recipe.js";
 import {RECIPES_STATUS} from "../constants/recipes.js";
 
@@ -27,7 +28,31 @@ class RecipeService {
         return await RecipeRepository.getRecipeById(id);
     }
 
-    async createRecipe(userId: string, body: Partial<IRecipe>) {
+    async createRecipe(userId: string, body: any) {
+        if (body.tags && Array.isArray(body.tags) && body.tags.length > 0) {
+            const tagIds = [];
+
+            for (const tagName of body.tags) {
+                if (typeof tagName !== 'string') continue;
+
+                const slug = tagName.toLowerCase().trim().replace(/\s+/g, '_');
+
+                let tag = await TagRepository.findBySlug(slug);
+
+                if (! tag) {
+                    tag = await TagRepository.create({
+                        name: tagName,
+                        slug: slug,
+                        created_by: userId
+                    });
+                }
+
+                tagIds.push(tag._id);
+            }
+
+            body.tags = tagIds;
+        }
+
         return await RecipeRepository.insertRecipe({
             ...body,
             user_id: userId,

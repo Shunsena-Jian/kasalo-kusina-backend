@@ -23,7 +23,7 @@ export const createRecipeRules = [
     body('difficulty').notEmpty().isString().withMessage('Difficulty must be a string'),
 
     body('tags').isArray().withMessage('Tags must be an array'),
-    body('tags.*').isMongoId().withMessage('Tags must be valid Mongo IDs'),
+    body('tags.*').isString().withMessage('Tags must be a string'),
 
     body('categories').isArray().withMessage('Categories must be an array'),
     body('categories.*').isMongoId().withMessage('Categories must be valid Mongo IDs')
