@@ -72,6 +72,7 @@ class RecipeService {
         return recipes.map(recipe => {
             const user = userMap.get(recipe.user_id);
             return {
+                _id: recipe._id,
                 user_name: user ? `${user.first_name} ${user.last_name}` : null,
                 title: recipe.title,
                 description: recipe.description,
