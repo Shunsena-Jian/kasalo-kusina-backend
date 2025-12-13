@@ -9,6 +9,7 @@ module.exports = {
         const tagsCollection = db.collection('tags');
 
         await tagsCollection.createIndex({ name: 1 });
+        await tagsCollection.createIndex({ slug: 1 }, { unique: true });
     },
 
     /**
