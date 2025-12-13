@@ -16,8 +16,6 @@ export async function createRecipe(req: Request, res: Response) {
              req.body.image = `/uploads/${req.file.filename}`;
         }
 
-        console.log(req.body);
-
         return res.success(await RecipeService.createRecipe(userId, req.body));
     } catch (error) {
         return res.error(error);
