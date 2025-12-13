@@ -11,12 +11,14 @@ const table = 'users';
 
 class UserRepository {
     async createUser(user: CreateUser) {
-        const { username, password, email, user_type, user_status } = user;
+        const { username, password, first_name, last_name, email, user_type, user_status } = user;
         const id = uuid();
 
         return knex(table).insert({
             id,
             username,
+            first_name,
+            last_name,
             password,
             email,
             user_type,

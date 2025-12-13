@@ -12,6 +12,14 @@ export const createUserRules = [
                 return Promise.reject('Username already exists');
             }
         }),
+    body('first_name')
+        .isString()
+        .notEmpty()
+        .withMessage('First name is required'),
+    body('last_name')
+        .isString()
+        .notEmpty()
+        .withMessage('First name is required'),
     body('email')
         .notEmpty()
         .isEmail()

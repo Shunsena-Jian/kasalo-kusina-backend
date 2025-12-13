@@ -56,7 +56,7 @@ export const isAuthenticated = (
     if (req.session?.userId) {
         return next();
     } else {
-        res.error(ERROR_MESSAGE.LOGIN_REQUIRED, 403);
+        res.error(ERROR_MESSAGE.LOGIN_REQUIRED, 401);
     }
 };
 

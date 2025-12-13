@@ -27,6 +27,8 @@ class UserService {
 
         const newUser: CreateUser = {
             username: user.username,
+            first_name: user.first_name,
+            last_name: user.last_name,
             email: user.email,
             user_type: USER_TYPES.KASALO,
             user_status: USER_STATUSES.ACTIVE,
